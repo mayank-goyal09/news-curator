@@ -3,6 +3,9 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from datetime import datetime, timezone
 from app.db.sqlite import init_db
 from app.services.digest_store import get_digest, save_digest

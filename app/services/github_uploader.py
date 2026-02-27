@@ -46,9 +46,9 @@ def upload_audio_to_github(audio_path: str) -> str:
             web_path = str(audio_path_obj).replace("\\", "/")
             public_url = f"{base}/{web_path}"
         else:
-            # Fallback to Raw GitHub URl
+            # Fallback to direct raw download URL (handles audio MIME types correctly)
             web_path = str(audio_path_obj).replace("\\", "/")
-            public_url = f"https://raw.githubusercontent.com/{github_repo}/main/{web_path}"
+            public_url = f"https://github.com/{github_repo}/raw/main/{web_path}"
 
         print(f"Public Audio URL: {public_url}")
         return public_url
