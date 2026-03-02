@@ -258,3 +258,41 @@ Set up **Task Scheduler** to run `run_daily.py` automatically:
 </div>
 
 ---
+
+## 🗺️ Roadmap
+
+- [x] RSS ingestion across 5 categories
+- [x] Local AI curation (Ollama)
+- [x] Text-to-Speech audio digest
+- [x] HTML email newsletter
+- [x] Live dashboard with category switching
+- [x] Email subscription system
+- [x] Voice Assistant button
+- [x] ☕ "Grab your coffee" toast nudge
+- [ ] Cloud deployment (Railway / Render)
+- [ ] Mobile-responsive layout improvements
+- [ ] User login & personalised feeds
+- [ ] Telegram / WhatsApp notifications
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+<a href="https://mayank-goyal09.github.io/">
+  <img src="https://capsule-render.vercel.app/api?type=rect&color=0:0D2017,100:1C5D42&height=60&text=Made%20with%20%E2%98%95%20by%20Mayank%20Goyal&fontColor=ffffff&fontSize=20&fontAlignY=65" width="500"/>
+</a>
+
+<br/><br/>
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-mayank--goyal09.github.io-31A572?style=for-the-badge&logo=github&logoColor=white)](https://mayank-goyal09.github.io/)
+[![GitHub](https://img.shields.io/badge/GitHub-mayank--goyal09-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mayank-goyal09)
+
+</div>
+
+---
+
+<!-- Footer Wave -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:31A572,100:0D2017&height=120&section=footer" width="100%"/>
+
