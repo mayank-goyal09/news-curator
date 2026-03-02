@@ -74,3 +74,55 @@
 </table>
 
 ---
+
+## 🖥️ Dashboard Preview
+
+<div align="center">
+
+```
+╔══════════════════════════════════════════════════════════╗
+║  🌿 EcoNews   About Me  Get News on Email  Voice Asst.  ║
+╠══════════════════════════════════════════════════════════╣
+║                                    ┌──────────────────┐  ║
+║  BEST OF THE WEEK                  │  Recommended     │  ║
+║                                    │                  │  ║
+║  "ChatGPT reaches 900M             │ 1. AI story...   │  ║
+║   weekly active users"             │ 2. Market...     │  ║
+║                                    │ 3. World...      │  ║
+║  Read article →                    │ 4. Tech...       │  ║
+║                                    │ 5. Satire...     │  ║
+║  ─────────────────────────────     └──────────────────┘  ║
+║  Satire  AI Tech  World  Warm  Market                    ║
+║  ┌───────┐ ┌───────┐ ┌───────┐                          ║
+║  │Card 1 │ │Card 2 │ │Card 3 │  ← 3 per category        ║
+║  └───────┘ └───────┘ └───────┘                          ║
+╚══════════════════════════════════════════════════════════╝
+```
+
+*☕ After 15 seconds: "Grab your coffee! Sit back & listen to today's news."*
+
+</div>
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    A[🌐 10+ RSS Feeds] --> B[run_ingest.py\nFetch & Store]
+    B --> C[(SQLite DB\narticles + subscribers)]
+    C --> D[run_curate.py\nOllama llama3.2]
+    D --> E[📦 Digest\n15 news × 5 cats\n+ 6 recommended]
+    E --> F[run_tts.py\nPyttsx3 Audio]
+    E --> G[run_send_email.py\nHTML Email]
+    E --> H[FastAPI\n/api/news\n/api/audio\n/api/subscribe]
+    F --> I[GitHub CDN\nMP3 file]
+    I --> H
+    H --> J[🖥️ EcoNews Dashboard\nlocalhost:8080]
+    J --> K[🎧 Voice Assistant]
+    J --> L[📧 Subscribe Popup]
+    J --> M[📰 Category Tabs]
+```
+
+---
+
