@@ -212,3 +212,49 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8080
 ```
 
 ---
+
+## ⏰ Automated Daily Schedule (Windows)
+
+Set up **Task Scheduler** to run `run_daily.py` automatically:
+
+| Time | Task | What Happens |
+|------|------|-------------|
+| 🌅 **7:00 AM** | `python run_daily.py` | Morning digest curated + emailed |
+| 🌙 **8:00 PM** | `python run_daily.py` | Evening digest curated + emailed |
+
+> **Subscribers** receive a beautiful HTML email with all 15 news articles organized by category, plus an audio player link.
+
+---
+
+## 🔌 API Reference
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Serves the EcoNews dashboard |
+| `/api/news` | GET | All 15 curated news (by category) |
+| `/api/news?category=ai` | GET | Filter by category |
+| `/api/news/featured` | GET | Featured "Best of Week" article |
+| `/api/audio` | GET | Audio MP3 URL |
+| `/api/subscribe` | POST | `{"email": "..."}` — subscribe |
+| `/api/categories` | GET | Category metadata |
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | FastAPI + Uvicorn |
+| **AI Model** | Ollama (llama3.2) — 100% local, no API keys |
+| **Database** | SQLite |
+| **RSS Parsing** | feedparser |
+| **Text-to-Speech** | pyttsx3 (offline) |
+| **Audio CDN** | GitHub Raw |
+| **Email** | smtplib + Gmail SMTP |
+| **Frontend** | Vanilla HTML + CSS + JS |
+
+</div>
+
+---
