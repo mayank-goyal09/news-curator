@@ -26,3 +26,51 @@
 </div>
 
 ---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🤖 AI Curation
+- Powered by **Ollama (llama3.2)** running 100% locally
+- Picks the **top 3 stories per category** from 10+ RSS feeds
+- Writes a `why_pick` explanation for each article
+- Auto-generates tags and an overall daily summary
+
+</td>
+<td width="50%">
+
+### 📰 5 News Categories
+- 🎭 **Satire** — The Onion, The Babylon Bee
+- 🤖 **AI & Technology** — TechCrunch, Ars Technica
+- 🌍 **Worldwide News** — BBC, Reuters
+- 💚 **Warming & Emotions** — Positive News, Upworthy
+- 📈 **Market News** — MarketWatch, CNBC
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🎧 Voice Digest
+- Text-to-Speech via `pyttsx3` (offline)
+- Reads all 15 curated articles by category
+- MP3 uploaded to **GitHub** as CDN
+- One-click **Voice Assistant** button on dashboard
+
+</td>
+<td width="50%">
+
+### 📧 Email Newsletter
+- Beautiful **HTML emails** with category sections
+- Users subscribe via the dashboard popup
+- Daily digest sent to **all subscribers** automatically
+- Powered by Gmail App Passwords (SMTP)
+
+</td>
+</tr>
+</table>
+
+---
