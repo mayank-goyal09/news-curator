@@ -126,3 +126,89 @@ flowchart LR
 
 ---
 
+## 📁 Project Structure
+
+```
+news-curator/
+│
+├── 🐍 app/
+│   ├── core/
+│   │   ├── config.py          # Settings & env vars
+│   │   └── sources.py         # 10+ RSS feeds × 5 categories
+│   ├── db/
+│   │   └── sqlite.py          # DB init (articles, digests, subscribers)
+│   └── services/
+│       ├── curator.py         # Ollama curation engine
+│       ├── digest_store.py    # Save/load digests
+│       ├── email_renderer.py  # HTML email builder
+│       ├── email_sender.py    # SMTP + subscriber broadcast
+│       ├── fetcher.py         # RSS parser
+│       ├── github_uploader.py # MP3 → GitHub CDN
+│       ├── ollama_client.py   # LLM interface
+│       └── tts.py             # Text-to-Speech
+│
+├── 🌐 frontend/
+│   ├── index.html             # Dashboard UI
+│   ├── style.css              # Design system + animations
+│   └── script.js              # API calls, audio, popups
+│
+├── 🚀 run_ingest.py           # Step 1: Fetch RSS → DB
+├── 🧠 run_curate.py           # Step 2: AI curation
+├── 🎙️ run_tts.py              # Step 3: Generate audio
+├── 📧 run_send_email.py       # Step 4: Send digest emails
+├── ⚡ run_daily.py            # All 4 steps in one command
+├── 🖥️ app/main.py             # FastAPI server
+└── 📋 requirements.txt
+```
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+```bash
+# 1. Install Ollama
+# Download from https://ollama.ai and run:
+ollama pull llama3.2
+
+# 2. Clone the repo
+git clone https://github.com/mayank-goyal09/news-curator.git
+cd news-curator
+
+# 3. Install dependencies
+pip install -r requirements.txt
+```
+
+### Configure `.env`
+
+```env
+# Email (Gmail)
+NEWS_EMAIL_SENDER=your@gmail.com
+NEWS_EMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
+NEWS_EMAIL_TO=recipient@gmail.com
+
+# Ollama
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_MODEL=llama3.2
+
+# GitHub (for audio CDN)
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+GITHUB_REPO=your-username/news-curator
+GITHUB_PAGES_BASE_URL=https://raw.githubusercontent.com/your-username/news-curator/main
+```
+
+### Run
+
+```bash
+# Start the AI pipeline (fetch → curate → audio → email)
+python run_daily.py
+
+# Start the web dashboard
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8080
+
+# Open in browser
+# → http://localhost:8080/
+```
+
+---
