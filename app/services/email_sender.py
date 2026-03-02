@@ -16,9 +16,9 @@ def _get_env(name: str) -> str:
     return _clean(val)
 
 
-def send_email_html(subject: str, html: str) -> None:
+def send_email_html(subject: str, html: str, to_override: str = None) -> None:
     sender = _get_env("NEWS_EMAIL_SENDER")
-    to_addr = _get_env("NEWS_EMAIL_TO")
+    to_addr = to_override or _get_env("NEWS_EMAIL_TO")
 
     # App password: remove spaces completely (Google shows it in groups)
     app_password = _get_env("NEWS_EMAIL_APP_PASSWORD").replace(" ", "")
@@ -36,9 +36,34 @@ def send_email_html(subject: str, html: str) -> None:
     msg.add_alternative(html, subtype="html")
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        # Optional debug: set NEWS_EMAIL_DEBUG=1 in .env if needed
         if os.getenv("NEWS_EMAIL_DEBUG") == "1":
-            smtp.set_debuglevel(1)  # prints SMTP conversation [web:478]
-
+            smtp.set_debuglevel(1)
         smtp.login(sender, app_password)
         smtp.send_message(msg)
+
+
+def send_to_all_subscribers(subject: str, html: str) -> int:
+    """Send digest email to all subscribers. Returns count of emails sent."""
+    from app.db.sqlite import get_conn
+    
+    with get_conn() as conn:
+        rows = conn.execute("SELECT email FROM subscribers").fetchall()
+    
+    sent_count = 0
+    for row in rows:
+        try:
+            send_email_html(subject, html, to_override=row["email"])
+            sent_count += 1
+            print(f"  Sent to: {row['email']}")
+        except Exception as e:
+            print(f"  Failed to send to {row['email']}: {e}")
+    
+    # Also send to the main recipient
+    try:
+        send_email_html(subject, html)
+        sent_count += 1
+        print(f"  Sent to main recipient")
+    except Exception as e:
+        print(f"  Failed to send to main recipient: {e}")
+    
+    return sent_count

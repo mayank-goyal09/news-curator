@@ -16,6 +16,7 @@ class Article:
     url: str
     published_at: str | None
     summary: str | None
+    image_url: str | None
 
 
 def _to_iso8601(entry: Any) -> str | None:
@@ -36,6 +37,43 @@ def _get_summary(entry: Any) -> str | None:
     content = getattr(entry, "content", None)
     if content and isinstance(content, list) and len(content) > 0:
         return content[0].get("value")
+    return None
+
+
+import re
+
+def _get_image(entry: Any) -> str | None:
+    # Check media_content
+    media_content = getattr(entry, "media_content", None)
+    if media_content and isinstance(media_content, list) and len(media_content) > 0:
+        url = media_content[0].get("url")
+        if url: return url
+
+    # Check media_thumbnail
+    media_thumbnail = getattr(entry, "media_thumbnail", None)
+    if media_thumbnail and isinstance(media_thumbnail, list) and len(media_thumbnail) > 0:
+        url = media_thumbnail[0].get("url")
+        if url: return url
+
+    # Check links (rel="enclosure" or type="image/*")
+    links = getattr(entry, "links", [])
+    for link in links:
+        if link.get("type", "").startswith("image/") or link.get("rel") == "enclosure":
+            url = link.get("href")
+            if url: return url
+
+    # Fallback: Scrape from summary or content using regex
+    html_corpus = getattr(entry, "summary", "")
+    content_list = getattr(entry, "content", [])
+    for c in content_list:
+        html_corpus += " " + c.get("value", "")
+
+    if html_corpus:
+        # Match <img ... src="url" ...>
+        match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', html_corpus, re.IGNORECASE)
+        if match:
+            return match.group(1)
+
     return None
 
 
@@ -66,6 +104,7 @@ def fetch_feed(source_id: str, feed_url: str, limit: int = 20) -> list[Article]:
                 url=url,
                 published_at=_to_iso8601(entry),
                 summary=_get_summary(entry),
+                image_url=_get_image(entry),
             )
         )
 

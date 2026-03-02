@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNews — AI-Curated Daily Digest</title>
+    <meta name="description"
+        content="EcoNews delivers AI-curated daily news across Satire, AI Technology, Worldwide, Warming & Emotions, and Market categories.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <div class="app-container">
+            <!-- Top Navigation -->
+            <header class="top-nav">
+                <div class="nav-left">
+                    <div class="logo">
+                        <span class="logo-icon"></span>
+                        <span class="logo-text">EcoNews</span>
+                    </div>
+                    <nav class="nav-links" id="nav-links">
+                        <a href="https://mayank-goyal09.github.io/" target="_blank" id="nav-about">About Me</a>
+                        <a href="#" id="nav-email">Get News on Email</a>
+                        <a href="#" id="nav-voice">Voice Assistant</a>
+                    </nav>
+                </div>
+                <div class="nav-right">
+                    <!-- Audio Player -->
+                    <div class="audio-player" id="audio-player" title="Listen to news audio">
+                        <button class="audio-btn headphone-btn" id="audio-headphone-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                                <path
+                                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                                </path>
+                            </svg>
+                        </button>
+
+                        <div class="audio-eq" id="audio-eq">
+                            <div class="eq-bar bar-1"></div>
+                            <div class="eq-bar bar-2"></div>
+                            <div class="eq-bar bar-3"></div>
+                            <div class="eq-bar bar-4"></div>
+                            <div class="eq-bar bar-5"></div>
+                        </div>
+
+                        <button class="audio-btn stop-btn" id="audio-stop-btn" title="Stop audio">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="language-selector">En <span class="chevron">˅</span></div>
+                </div>
+            </header>
+
+            <!-- Main Content Grid -->
+            <main class="main-grid">
+
+                <!-- Left Column (Featured) -->
+                <section class="featured-section">
+                    <!-- Top content: Featured Headline + Abstract Graphic -->
+                    <div class="featured-top-area">
+                        <div class="featured-text">
+                            <div class="badge">BEST OF THE WEEK</div>
+                            <div class="meta" id="featured-meta">Loading...</div>
+                            <h1 class="headline" id="featured-headline">
+                                <a href="#" id="featured-link" target="_blank"
+                                    style="color:inherit;text-decoration:none;">Loading curated news...</a>
+                            </h1>
+                            <div class="tags" id="featured-tags"></div>
+                            <a href="#" id="featured-read-btn" target="_blank" class="read-btn">Read article <span
+                                    class="arrow">→</span></a>
+                        </div>
+
+                        <!-- Abstract Image -->
+                        <div class="abstract-graphic">
+                            <div class="orb orb-1"></div>
+                            <div class="orb orb-2"></div>
+                            <div class="orb orb-3"></div>
+                            <div class="glass-overlay"></div>
+                        </div>
+                    </div>
+
+                    <!-- Category Tabs -->
+                    <div class="category-tabs-container">
+                        <div class="category-tabs" id="category-tabs">
+                            <button class="tab-btn active" data-category="satire">Satire</button>
+                            <button class="tab-btn" data-category="ai">AI Technology</button>
+                            <button class="tab-btn" data-category="worldwide">Worldwide News</button>
+                            <button class="tab-btn" data-category="warming">Warming & Emotions</button>
+                            <button class="tab-btn" data-category="market">Market News</button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic News Cards -->
+                    <div class="featured-bottom-row" id="dynamic-cards-container">
+                        <!-- Cards injected by JavaScript -->
+                        <div class="loading-skeleton">
+                            <div class="skeleton-card"></div>
+                            <div class="skeleton-card"></div>
+                            <div class="skeleton-card"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right Column (Sidebar) -->
+                <aside class="sidebar-section">
+                    <div class="sidebar-header">
+                        <h2>Recommended</h2>
+                    </div>
+
+                    <!-- Main Recommended Article (dynamically filled) -->
+                    <article class="featured-recommended" id="sidebar-featured">
+                        <div class="mock-image gradient-bg-1">
+                            <div class="mock-image-content">
+                                <div class="meta text-white" id="sidebar-featured-meta">Loading...</div>
+                                <h3 class="title text-white" id="sidebar-featured-title">Loading news...</h3>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Sidebar list items (dynamically filled) -->
+                    <div class="recommended-list" id="sidebar-list">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </aside>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="hidden-audio" preload="none"></audio>
+
+    <!-- Email Subscription Toast -->
+    <div id="email-popup" class="toast-notification hidden">
+        <button id="close-popup" class="toast-close-btn">&times;</button>
+        <div class="toast-header">
+            <div class="logo-icon toast-logo"></div>
+        </div>
+        <p class="toast-message">Miss this, and tomorrow starts without context.</p>
+        <p class="toast-submessage">Get news everyday on your Inbox Black Hole!</p>
+        <form id="subscribe-form" class="toast-form">
+            <input type="email" id="subscribe-email" placeholder="Enter email address" required>
+            <button type="submit" class="toast-subscribe-btn subscribe-btn">Subscribe</button>
+        </form>
+        <p class="toast-status" id="toast-status"></p>
+    </div>
+
+    <!-- ☕ Coffee Nudge Toast -->
+    <div id="coffee-toast" class="coffee-toast hidden">
+        <button class="coffee-toast-close" id="coffee-toast-close">✕</button>
+        <div class="coffee-toast-icon">☕</div>
+        <div class="coffee-toast-body">
+            <p class="coffee-toast-title">Grab your coffee!</p>
+            <p class="coffee-toast-sub">Sit back & let us read today's news to you.</p>
+            <button class="coffee-toast-btn" id="coffee-listen-btn">▶ Listen Now</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

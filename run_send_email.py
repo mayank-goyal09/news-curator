@@ -10,13 +10,12 @@ load_dotenv()
 from app.db.sqlite import init_db
 from app.services.digest_store import get_digest
 from app.services.email_renderer import render_digest_html
-from app.services.email_sender import send_email_html
+from app.services.email_sender import send_email_html, send_to_all_subscribers
 
 
 def main():
     init_db()
 
-    # ✅ Auto date (UTC) to match your stored digest key format
     date = datetime.now(timezone.utc).date().isoformat()
 
     digest = get_digest(date)
@@ -24,8 +23,14 @@ def main():
         raise SystemExit(f"No digest found for {date}. Run run_curate.py first.")
 
     html = render_digest_html(digest)
+    
+    # Send to main recipient
     send_email_html(subject=f"Daily Tech Digest — {date}", html=html)
-    print("Email sent successfully.")
+    print("Email sent to main recipient.")
+    
+    # Also send to all subscribers
+    count = send_to_all_subscribers(subject=f"Daily Tech Digest — {date}", html=html)
+    print(f"Sent to {count} total recipients (including subscribers).")
 
 
 if __name__ == "__main__":

@@ -20,4 +20,28 @@ def init_db() -> None:
             created_at TEXT NOT NULL DEFAULT (datetime('now'))
         )
         """)
-
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS articles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            source_id TEXT NOT NULL,
+            category TEXT NOT NULL DEFAULT '',
+            title TEXT NOT NULL,
+            url TEXT NOT NULL UNIQUE,
+            published_at TEXT,
+            summary TEXT,
+            image_url TEXT,
+            fetched_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+        """)
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL UNIQUE,
+            subscribed_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+        """)
+        # Try to add category column if it doesn't exist (for existing DBs)
+        try:
+            conn.execute("ALTER TABLE articles ADD COLUMN category TEXT NOT NULL DEFAULT ''")
+        except sqlite3.OperationalError:
+            pass  # Column already exists

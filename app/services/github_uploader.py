@@ -27,15 +27,19 @@ def upload_audio_to_github(audio_path: str) -> str:
         # Ensure it's tracked by git
         subprocess.run(["git", "add", str(audio_path_obj)], check=True, capture_output=True)
         
-        # Commit it
+        # Check if there are changes to commit
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        # Instead of strict checking, just try to commit, but do not fail if nothing to commit
         commit_msg = f"Update daily audio digest: {audio_path_obj.name}"
-        subprocess.run(["git", "commit", "-m", commit_msg], check=True, capture_output=True)
+        commit_res = subprocess.run(["git", "commit", "-m", commit_msg], capture_output=True)
         
-        print(f"Git: Committed {audio_path_obj.name}")
-        
-        # Push it
-        subprocess.run(["git", "push", "origin", "main"], check=True, capture_output=True)
-        print("Git: Pushed to origin/main successfully.")
+        if commit_res.returncode == 0:
+            print(f"Git: Committed {audio_path_obj.name}")
+            # Push it
+            subprocess.run(["git", "push", "origin", "main"], check=True, capture_output=True)
+            print("Git: Pushed to origin/main successfully.")
+        else:
+            print(f"Git: No new changes to commit for {audio_path_obj.name} (already uploaded).")
 
         # Construct public URL
         # If GitHub Pages is configured, use it, else fallback to raw githubusercontent
@@ -48,7 +52,7 @@ def upload_audio_to_github(audio_path: str) -> str:
         else:
             # Fallback to direct raw download URL (handles audio MIME types correctly)
             web_path = str(audio_path_obj).replace("\\", "/")
-            public_url = f"https://github.com/{github_repo}/raw/main/{web_path}"
+            public_url = f"https://raw.githubusercontent.com/{github_repo}/main/{web_path}"
 
         print(f"Public Audio URL: {public_url}")
         return public_url
