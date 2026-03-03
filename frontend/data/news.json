@@ -1,0 +1,432 @@
+{
+  "date_utc": "2026-03-03",
+  "overall_summary": "The world saw a mix of financial surprises and historic discoveries on Tuesday, as ultra-rare Pokémon cards sold for record-breaking prices, while AI-native networks proved their worth, and the NFL made its Super Bowl sustainable. Meanwhile, India and Canada reset ties with a landmark nuclear energy deal, and Iran's conflict escalated after a U.S. embassy was hit by drones. Additionally, a wealthy individual opted for German citizenship amidst rising anti-Semitism concerns, and a school in the UK compared student loans to £30 phone contracts, sparking accusations of 'deeply misleading' information.",
+  "categories": {
+    "satire": [
+      {
+        "title": "I dodged a £30 flight luggage fee by posting my clothes for £2.59",
+        "url": "https://www.bbc.com/news/articles/cvgvrlnpq11o?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbcnews",
+        "why_pick": "This article highlights the creative ways people find to save money, and how some airlines are trying to make more from passengers' luggage fees. It's a lighthearted take on a common travel problem.",
+        "tags": [
+          "travel",
+          "money"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b544/live/e1dd3e10-1625-11f1-9f25-83b60c226cca.jpg",
+        "category": "satire"
+      },
+      {
+        "title": "One of UK's richest men wants German citizenship over 'hostility' to Jews",
+        "url": "https://www.bbc.com/news/articles/c4g2jp6y630o?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbcnews",
+        "why_pick": "This article brings attention to a sensitive topic, highlighting the complexities of Jewish relations with Germany and the motivations behind one of the UK's richest men seeking citizenship.",
+        "tags": [
+          "politics",
+          "judaism"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/509a/live/095ebf70-1303-11f1-bf20-f10c8e9eb926.jpg",
+        "category": "satire"
+      },
+      {
+        "title": "'Deeply misleading' school talks compared student loans to £30 phone contracts",
+        "url": "https://www.bbc.com/news/articles/cy5706ep1l3o?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbcnews",
+        "why_pick": "This article shines a light on a common misconception about student loans, and how schools are perpetuating it. It's an important story for those looking to understand the complexities of education finance.",
+        "tags": [
+          "education",
+          "finance"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/efcc/live/b95211b0-16d3-11f1-801d-ed3cff6bf876.png",
+        "category": "satire"
+      }
+    ],
+    "ai": [
+      {
+        "title": "AI-Native networks are no longer a 6G promise–MWC 2026 just proved it",
+        "url": "https://www.artificialintelligence-news.com/news/ai-native-networks-mwc-2026/",
+        "source_id": "ai_news",
+        "why_pick": "This article highlights the advancements in AI-native networks, which were initially promised for 6G. The fact that MWC 2026 has proven it shows the rapid progress being made in this field.",
+        "tags": [
+          "6g",
+          "ai-native-networks"
+        ],
+        "category": "ai"
+      },
+      {
+        "title": "Cursor has reportedly surpassed $2B in annualized revenue",
+        "url": "https://techcrunch.com/2026/03/02/cursor-has-reportedly-surpassed-2b-in-annualized-revenue/",
+        "source_id": "techcrunch",
+        "why_pick": "This article showcases the significant growth of Cursor, a startup that has reportedly surpassed $2B in annualized revenue. This is an interesting example of successful entrepreneurship and innovation.",
+        "tags": [
+          "startups",
+          "growth"
+        ],
+        "category": "ai"
+      },
+      {
+        "title": "India’s Pronto formalizes house help as its valuation jumps 8x in under a year",
+        "url": "https://techcrunch.com/2026/03/02/indias-pronto-formalizes-house-help-as-its-valuation-jumps-8x-in-under-a-year/",
+        "source_id": "techcrunch",
+        "why_pick": "This article highlights the success of Pronto, a company that has formalized its house help and seen its valuation jump 8x in under a year. This is an interesting example of how technology can disrupt traditional industries.",
+        "tags": [
+          "india",
+          "ai-powered"
+        ],
+        "category": "ai"
+      }
+    ],
+    "worldwide": [
+      {
+        "title": "India and Canada reset ties with 'landmark' nuclear energy deal",
+        "url": "https://www.bbc.com/news/articles/cx24gl7jrgno?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbc_world",
+        "why_pick": "This article matters as it highlights a significant development in India's foreign policy, with implications for regional and global nuclear energy cooperation. The deal also underscores the growing importance of Canada as a key player in international nuclear negotiations.",
+        "tags": [
+          "nuclear",
+          "diplomacy"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b355/live/9a5a8070-1616-11f1-9697-634d5add2261.jpg",
+        "category": "worldwide"
+      },
+      {
+        "title": "Israel strikes Lebanon after Hezbollah rocket fire as Iran conflict widens",
+        "url": "https://www.bbc.com/news/articles/c5y4v8g13wxo?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbc_world",
+        "why_pick": "This article is significant because it sheds light on the escalating tensions between Israel and Iran, with potential implications for regional stability. The incident also raises questions about the role of Hezbollah in the conflict.",
+        "tags": [
+          "iran",
+          "israel"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/62ac/live/e9c39a10-1649-11f1-9120-a910fc22c6ac.jpg",
+        "category": "worldwide"
+      },
+      {
+        "title": "Lost Rembrandt painting rediscovered after 65 years",
+        "url": "https://www.bbc.com/news/articles/c1kgln0yg3po?at_medium=RSS&at_campaign=rss",
+        "source_id": "bbc_world",
+        "why_pick": "The rediscovery of the lost Rembrandt painting is a significant cultural event, highlighting the enduring power of art to captivate and inspire audiences. The painting's revival also underscores the importance of preservation efforts in protecting our shared cultural heritage.",
+        "tags": [
+          "art",
+          "rembrandt"
+        ],
+        "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5cc3/live/fe63eae0-1628-11f1-801d-ed3cff6bf876.jpg",
+        "category": "worldwide"
+      }
+    ],
+    "warming": [
+      {
+        "title": "Stanford Cures Type-1 Diabetes in Mice Without Insulin or Immune Suppression",
+        "url": "https://www.goodnewsnetwork.org/stanford-cures-type-1-diabetes-in-mice-without-insulin-or-immune-suppression/",
+        "source_id": "goodnews",
+        "why_pick": "This groundbreaking study offers hope for humans with Type-1 diabetes, a disease that has long been difficult to manage. The discovery could lead to new treatments and potentially even a cure.",
+        "tags": [
+          "diabetes",
+          "cure"
+        ],
+        "category": "warming"
+      },
+      {
+        "title": "NFL Delivers Net-Zero Super Bowl with Substantial Recycling of Trash and Other Materials",
+        "url": "https://www.goodnewsnetwork.org/nfl-delivers-net-zero-super-bowl-with-substantial-recycling-of-trash-and-other-materials/",
+        "source_id": "goodnews",
+        "why_pick": "This initiative demonstrates the NFL's commitment to sustainability and reducing waste. The event showcases a positive example of large-scale environmental responsibility.",
+        "tags": [
+          " nfl",
+          "sustainability"
+        ],
+        "category": "warming"
+      },
+      {
+        "title": "Ultra-Rare Pokemon Card That Cost $2 Sells for $40,000 at Auction, as Prices Soar",
+        "url": "https://www.goodnewsnetwork.org/ultra-rare-pokemon-card-that-cost-2-goes-to-auction-for-40000/",
+        "source_id": "goodnews",
+        "why_pick": "This unexpected sale highlights the rapidly increasing value of rare collectibles and the enthusiasm of collectors. The story showcases the human side of collecting and trading.",
+        "tags": [
+          "pokemon",
+          "collectibles"
+        ],
+        "category": "warming"
+      }
+    ],
+    "market": [
+      {
+        "title": "World’s hottest stock market suddenly blows cold with a 7% tumble",
+        "url": "https://www.marketwatch.com/story/worlds-hottest-stock-market-suddenly-blows-cold-with-a-7-tumble-c1f15650?mod=mw_rss_topstories",
+        "source_id": "marketwatch",
+        "why_pick": "The article matters as it highlights the unexpected turn of events in the stock market, which can have significant implications for investors and the overall economy. It also raises questions about market volatility and the ability of top performers to maintain their momentum.",
+        "tags": [
+          "stock market",
+          "volatility"
+        ],
+        "image_url": "https://images.mktw.net/im-59548846",
+        "category": "market"
+      },
+      {
+        "title": "Opendoor CEO says his firm is offering mortgages at 4.99%. Some are puzzled how.",
+        "url": "https://www.marketwatch.com/story/opendoor-ceo-says-his-firm-is-offering-mortgages-at-4-99-some-are-puzzled-how-b5d75613?mod=mw_rss_topstories",
+        "source_id": "marketwatch",
+        "why_pick": "The article is noteworthy as it reveals a unique offering by Opendoor, which can impact the mortgage market and potentially influence consumer behavior. It also raises questions about the company's strategy and the competitiveness of its product.",
+        "tags": [
+          "mortgages",
+          "Opendoor"
+        ],
+        "image_url": "https://images.mktw.net/im-93995147",
+        "category": "market"
+      },
+      {
+        "title": "Iran war live updates: U.S. embassy in Riyadh hit by drones, Trump promises response 'soon'",
+        "url": "https://www.cnbc.com/2026/03/03/us-iran-war-live-updates.html",
+        "source_id": "cnbc",
+        "why_pick": "The article is significant as it reports on the escalating tensions between the US and Iran, which can have far-reaching consequences for global politics and economies. It also provides live updates on the situation, making it a valuable resource for those following the developments.",
+        "tags": [
+          "iran war",
+          "us news"
+        ],
+        "category": "market"
+      }
+    ]
+  },
+  "recommended": [
+    {
+      "title": "L.L.Bean Promo Codes and Deals: Up to 75% Off Outdoor Gear",
+      "url": "https://www.wired.com/story/ll-bean-promo-code/",
+      "source_id": "wired",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": "https://media.wired.com/photos/67b63b9a4816461befb48207/master/pass/WIRED-Coupons-R2_12.png"
+    },
+    {
+      "title": "What Is That Mysterious Metallic Device US Chief Design Officer Joe Gebbia Is Using?",
+      "url": "https://www.wired.com/story/joe-gebbia-mystery-metallic-device/",
+      "source_id": "wired",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": "https://media.wired.com/photos/69a61e4e7c1057ec63585309/master/pass/Gear_JoeGebbia_GettyImages-1183210213.jpg"
+    },
+    {
+      "title": "The ‘European’ Jolla Phone Is an Anti-Big-Tech Smartphone",
+      "url": "https://www.wired.com/story/jolla-phone-2026/",
+      "source_id": "wired",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": "https://media.wired.com/photos/69a5d273ed144c3e59b383cc/master/pass/The%20Jolla%20Phone%20SOURCE%20Jolla.jpg"
+    },
+    {
+      "title": "This AI Agent Is Ready to Serve, Mid-Phone Call",
+      "url": "https://www.wired.com/story/deutsche-telekom-elevenlabs-ai-phone-calls-mwc-2026/",
+      "source_id": "wired",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": "https://media.wired.com/photos/69a60357f5e4bf87e63fb28e/master/pass/sec-telecom-2259493480.jpg"
+    },
+    {
+      "title": "ChatGPT uninstalls surged by 295% after DoD deal",
+      "url": "https://techcrunch.com/2026/03/02/chatgpt-uninstalls-surged-by-295-after-dod-deal/",
+      "source_id": "techcrunch",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": null
+    },
+    {
+      "title": "Stripe wants to turn your AI costs into a profit center",
+      "url": "https://techcrunch.com/2026/03/02/stripe-wants-to-turn-your-ai-costs-into-a-profit-center/",
+      "source_id": "techcrunch",
+      "why_pick": "Recommended from AI & Technology.",
+      "tags": [
+        "ai"
+      ],
+      "category": "ai",
+      "image_url": null
+    }
+  ],
+  "top_picks": [
+    {
+      "title": "I dodged a £30 flight luggage fee by posting my clothes for £2.59",
+      "url": "https://www.bbc.com/news/articles/cvgvrlnpq11o?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbcnews",
+      "why_pick": "This article highlights the creative ways people find to save money, and how some airlines are trying to make more from passengers' luggage fees. It's a lighthearted take on a common travel problem.",
+      "tags": [
+        "travel",
+        "money"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b544/live/e1dd3e10-1625-11f1-9f25-83b60c226cca.jpg",
+      "category": "satire"
+    },
+    {
+      "title": "One of UK's richest men wants German citizenship over 'hostility' to Jews",
+      "url": "https://www.bbc.com/news/articles/c4g2jp6y630o?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbcnews",
+      "why_pick": "This article brings attention to a sensitive topic, highlighting the complexities of Jewish relations with Germany and the motivations behind one of the UK's richest men seeking citizenship.",
+      "tags": [
+        "politics",
+        "judaism"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/509a/live/095ebf70-1303-11f1-bf20-f10c8e9eb926.jpg",
+      "category": "satire"
+    },
+    {
+      "title": "'Deeply misleading' school talks compared student loans to £30 phone contracts",
+      "url": "https://www.bbc.com/news/articles/cy5706ep1l3o?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbcnews",
+      "why_pick": "This article shines a light on a common misconception about student loans, and how schools are perpetuating it. It's an important story for those looking to understand the complexities of education finance.",
+      "tags": [
+        "education",
+        "finance"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/efcc/live/b95211b0-16d3-11f1-801d-ed3cff6bf876.png",
+      "category": "satire"
+    },
+    {
+      "title": "AI-Native networks are no longer a 6G promise–MWC 2026 just proved it",
+      "url": "https://www.artificialintelligence-news.com/news/ai-native-networks-mwc-2026/",
+      "source_id": "ai_news",
+      "why_pick": "This article highlights the advancements in AI-native networks, which were initially promised for 6G. The fact that MWC 2026 has proven it shows the rapid progress being made in this field.",
+      "tags": [
+        "6g",
+        "ai-native-networks"
+      ],
+      "category": "ai"
+    },
+    {
+      "title": "Cursor has reportedly surpassed $2B in annualized revenue",
+      "url": "https://techcrunch.com/2026/03/02/cursor-has-reportedly-surpassed-2b-in-annualized-revenue/",
+      "source_id": "techcrunch",
+      "why_pick": "This article showcases the significant growth of Cursor, a startup that has reportedly surpassed $2B in annualized revenue. This is an interesting example of successful entrepreneurship and innovation.",
+      "tags": [
+        "startups",
+        "growth"
+      ],
+      "category": "ai"
+    },
+    {
+      "title": "India’s Pronto formalizes house help as its valuation jumps 8x in under a year",
+      "url": "https://techcrunch.com/2026/03/02/indias-pronto-formalizes-house-help-as-its-valuation-jumps-8x-in-under-a-year/",
+      "source_id": "techcrunch",
+      "why_pick": "This article highlights the success of Pronto, a company that has formalized its house help and seen its valuation jump 8x in under a year. This is an interesting example of how technology can disrupt traditional industries.",
+      "tags": [
+        "india",
+        "ai-powered"
+      ],
+      "category": "ai"
+    },
+    {
+      "title": "India and Canada reset ties with 'landmark' nuclear energy deal",
+      "url": "https://www.bbc.com/news/articles/cx24gl7jrgno?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbc_world",
+      "why_pick": "This article matters as it highlights a significant development in India's foreign policy, with implications for regional and global nuclear energy cooperation. The deal also underscores the growing importance of Canada as a key player in international nuclear negotiations.",
+      "tags": [
+        "nuclear",
+        "diplomacy"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b355/live/9a5a8070-1616-11f1-9697-634d5add2261.jpg",
+      "category": "worldwide"
+    },
+    {
+      "title": "Israel strikes Lebanon after Hezbollah rocket fire as Iran conflict widens",
+      "url": "https://www.bbc.com/news/articles/c5y4v8g13wxo?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbc_world",
+      "why_pick": "This article is significant because it sheds light on the escalating tensions between Israel and Iran, with potential implications for regional stability. The incident also raises questions about the role of Hezbollah in the conflict.",
+      "tags": [
+        "iran",
+        "israel"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/62ac/live/e9c39a10-1649-11f1-9120-a910fc22c6ac.jpg",
+      "category": "worldwide"
+    },
+    {
+      "title": "Lost Rembrandt painting rediscovered after 65 years",
+      "url": "https://www.bbc.com/news/articles/c1kgln0yg3po?at_medium=RSS&at_campaign=rss",
+      "source_id": "bbc_world",
+      "why_pick": "The rediscovery of the lost Rembrandt painting is a significant cultural event, highlighting the enduring power of art to captivate and inspire audiences. The painting's revival also underscores the importance of preservation efforts in protecting our shared cultural heritage.",
+      "tags": [
+        "art",
+        "rembrandt"
+      ],
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5cc3/live/fe63eae0-1628-11f1-801d-ed3cff6bf876.jpg",
+      "category": "worldwide"
+    },
+    {
+      "title": "Stanford Cures Type-1 Diabetes in Mice Without Insulin or Immune Suppression",
+      "url": "https://www.goodnewsnetwork.org/stanford-cures-type-1-diabetes-in-mice-without-insulin-or-immune-suppression/",
+      "source_id": "goodnews",
+      "why_pick": "This groundbreaking study offers hope for humans with Type-1 diabetes, a disease that has long been difficult to manage. The discovery could lead to new treatments and potentially even a cure.",
+      "tags": [
+        "diabetes",
+        "cure"
+      ],
+      "category": "warming"
+    },
+    {
+      "title": "NFL Delivers Net-Zero Super Bowl with Substantial Recycling of Trash and Other Materials",
+      "url": "https://www.goodnewsnetwork.org/nfl-delivers-net-zero-super-bowl-with-substantial-recycling-of-trash-and-other-materials/",
+      "source_id": "goodnews",
+      "why_pick": "This initiative demonstrates the NFL's commitment to sustainability and reducing waste. The event showcases a positive example of large-scale environmental responsibility.",
+      "tags": [
+        " nfl",
+        "sustainability"
+      ],
+      "category": "warming"
+    },
+    {
+      "title": "Ultra-Rare Pokemon Card That Cost $2 Sells for $40,000 at Auction, as Prices Soar",
+      "url": "https://www.goodnewsnetwork.org/ultra-rare-pokemon-card-that-cost-2-goes-to-auction-for-40000/",
+      "source_id": "goodnews",
+      "why_pick": "This unexpected sale highlights the rapidly increasing value of rare collectibles and the enthusiasm of collectors. The story showcases the human side of collecting and trading.",
+      "tags": [
+        "pokemon",
+        "collectibles"
+      ],
+      "category": "warming"
+    },
+    {
+      "title": "World’s hottest stock market suddenly blows cold with a 7% tumble",
+      "url": "https://www.marketwatch.com/story/worlds-hottest-stock-market-suddenly-blows-cold-with-a-7-tumble-c1f15650?mod=mw_rss_topstories",
+      "source_id": "marketwatch",
+      "why_pick": "The article matters as it highlights the unexpected turn of events in the stock market, which can have significant implications for investors and the overall economy. It also raises questions about market volatility and the ability of top performers to maintain their momentum.",
+      "tags": [
+        "stock market",
+        "volatility"
+      ],
+      "image_url": "https://images.mktw.net/im-59548846",
+      "category": "market"
+    },
+    {
+      "title": "Opendoor CEO says his firm is offering mortgages at 4.99%. Some are puzzled how.",
+      "url": "https://www.marketwatch.com/story/opendoor-ceo-says-his-firm-is-offering-mortgages-at-4-99-some-are-puzzled-how-b5d75613?mod=mw_rss_topstories",
+      "source_id": "marketwatch",
+      "why_pick": "The article is noteworthy as it reveals a unique offering by Opendoor, which can impact the mortgage market and potentially influence consumer behavior. It also raises questions about the company's strategy and the competitiveness of its product.",
+      "tags": [
+        "mortgages",
+        "Opendoor"
+      ],
+      "image_url": "https://images.mktw.net/im-93995147",
+      "category": "market"
+    },
+    {
+      "title": "Iran war live updates: U.S. embassy in Riyadh hit by drones, Trump promises response 'soon'",
+      "url": "https://www.cnbc.com/2026/03/03/us-iran-war-live-updates.html",
+      "source_id": "cnbc",
+      "why_pick": "The article is significant as it reports on the escalating tensions between the US and Iran, which can have far-reaching consequences for global politics and economies. It also provides live updates on the situation, making it a valuable resource for those following the developments.",
+      "tags": [
+        "iran war",
+        "us news"
+      ],
+      "category": "market"
+    }
+  ]
+}
