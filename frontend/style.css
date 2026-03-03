@@ -1,503 +1,1376 @@
-// ═══════════════════════════════════════════════════════════════════
-//  EcoNews — Frontend Script (Connected to FastAPI Backend)
-// ═══════════════════════════════════════════════════════════════════
+:root {
+    /* Color Palette */
+    --body-bg: #EAE6DB;
+    --app-bg: #FDFBF5;
 
-const API_BASE = window.location.origin; // Same origin as the server
+    --text-primary: #0D2017;
+    --text-secondary: #587164;
+    --text-light: #9BB0A5;
 
-// ─── STATE ──────────────────────────────────────────────────────────
-let allNews = {};          // { satire: [...], ai: [...], ... }
-let recommendedNews = [];  // 6 sidebar recommended items
-let activeCategory = 'satire';
-let audioUrl = null;
-let isAudioPlaying = false;
+    --accent-dark: #123C2A;
+    --accent-main: #1C5D42;
+    --accent-light: #E7F3EE;
+    --accent-vibrant: #31A572;
 
-// Category labels for display
-const CATEGORY_LABELS = {
-    satire: 'Satire',
-    ai: 'AI Technology',
-    worldwide: 'Worldwide News',
-    warming: 'Warming & Emotions',
-    market: 'Market News',
-};
+    /* Orb Colors */
+    --orb-1: #1C5D42;
+    --orb-2: #B1D7A7;
+    --orb-3: #ECE4B3;
 
-// Gradient classes for sidebar items
-const GRADIENT_CLASSES = [
-    'gradient-bg-1', 'gradient-bg-2', 'gradient-bg-3',
-    'gradient-bg-4', 'gradient-bg-5'
-];
+    /* UI Elements */
+    --border-color: #EAEAE0;
+    --shadow-soft: 0 12px 36px rgba(13, 32, 23, 0.05);
+    --shadow-hover: 0 16px 48px rgba(13, 32, 23, 0.08);
+    --radius-app: 32px;
+    --radius-card: 20px;
+    --radius-thumb: 16px;
+    --radius-pill: 40px;
 
-
-// ─── INIT ───────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    initParallax();
-    initAudioPlayer();
-    initEmailPopup();
-    initCoffeeToast();    // ☕ shows after 15s
-    initNavButtons();     // new 3-button nav
-    initCategoryTabs();   // category tabs still work below the headline
-    initNavAlert();       // 🔴 sad alert banner
-
-    // Fetch everything from the backend
-    fetchAllNews();
-    fetchFeaturedArticle();
-    fetchAudioUrl();
-});
-
-
-// ─── NAV ALERT DISMISS ──────────────────────────────────────────────
-function initNavAlert() {
-    const alert = document.getElementById('nav-alert');
-    const closeBtn = document.getElementById('nav-alert-close');
-    if (!alert || !closeBtn) return;
-
-    closeBtn.addEventListener('click', () => {
-        alert.classList.add('dismissed');
-        setTimeout(() => alert.remove(), 350);
-    });
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-
-
-// ─── COFFEE TOAST ───────────────────────────────────────────────────
-function initCoffeeToast() {
-    const toast = document.getElementById('coffee-toast');
-    const closeBtn = document.getElementById('coffee-toast-close');
-    const listenBtn = document.getElementById('coffee-listen-btn');
-    const audioPlayBtn = document.getElementById('audio-headphone-btn');
-
-    if (!toast) return;
-
-    // Show after 15 seconds
-    setTimeout(() => {
-        toast.classList.remove('hidden');
-        // Slight delay so CSS transition fires
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => toast.classList.add('show'));
-        });
-    }, 15000);
-
-    // Close button — slide back down
-    closeBtn.addEventListener('click', () => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.classList.add('hidden'), 500);
-    });
-
-    // "Listen Now" — trigger audio player & close toast
-    listenBtn.addEventListener('click', () => {
-        if (audioPlayBtn) audioPlayBtn.click();
-        toast.classList.remove('show');
-        setTimeout(() => toast.classList.add('hidden'), 500);
-    });
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: var(--font-sans);
+    background-color: var(--body-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
 
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
 
-// ─── FETCH ALL NEWS ─────────────────────────────────────────────────
-async function fetchAllNews() {
-    try {
-        const res = await fetch(`${API_BASE}/api/news`);
-        const data = await res.json();
+/* App Container Wrapper */
+.app-wrapper {
+    width: 100%;
+    max-width: 1440px;
+    padding: 8px;
+    border-radius: calc(var(--radius-app) + 8px);
+    background: linear-gradient(135deg, rgba(253, 251, 245, 1) 0%, rgba(231, 243, 238, 0.9) 40%, rgba(177, 215, 167, 0.7) 100%);
+    box-shadow:
+        0 20px 50px rgba(13, 32, 23, 0.1),
+        -15px -15px 40px rgba(253, 251, 245, 0.9),
+        15px 15px 40px rgba(177, 215, 167, 0.6);
+    display: flex;
+}
 
-        allNews = data.categories || {};
-        recommendedNews = data.recommended || [];
-        audioUrl = data.audio_url || null;
+/* App Container */
+.app-container {
+    background-color: var(--app-bg);
+    border-radius: var(--radius-app);
+    width: 100%;
+    min-height: 85vh;
+    padding: 2.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
 
-        // Paint current category
-        renderCategoryCards(activeCategory);
-        renderSidebar();
+/* --- Top Navigation --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    z-index: 10;
+}
 
-    } catch (err) {
-        console.error('Failed to fetch news:', err);
-        showFallbackCards();
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--accent-vibrant), var(--accent-dark));
+    border-radius: 4px;
+    transform: rotate(45deg);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    opacity: 0.7;
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-main);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    opacity: 1;
+}
+
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-links a .plus {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* --- Nav Audio Player --- */
+.audio-player {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    overflow: hidden;
+    max-width: 38px;
+    padding: 6px;
+    border-radius: 20px;
+    transition: max-width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.4s;
+    background-color: transparent;
+}
+
+.audio-player.playing {
+    max-width: 200px;
+    background-color: rgba(49, 135, 72, 0.12);
+}
+
+.audio-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s, color 0.2s;
+    padding: 0;
+}
+
+.audio-btn svg {
+    width: 22px;
+    height: 22px;
+    transition: fill 0.3s, fill-opacity 0.3s;
+}
+
+.audio-btn:hover {
+    color: var(--accent-main);
+}
+
+.headphone-btn {
+    animation: audio-pulse 3s infinite ease-in-out;
+    color: #00e5ff;
+}
+
+.audio-player.playing .headphone-btn {
+    animation: none;
+    color: var(--text-primary);
+}
+
+.stop-btn {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s, transform 0.3s;
+    transition-delay: 0s;
+    color: #318748;
+    padding-right: 4px;
+}
+
+.stop-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.stop-btn:hover {
+    color: var(--accent-main);
+}
+
+.audio-player.playing .stop-btn {
+    opacity: 1;
+    transform: scale(1);
+    transition-delay: 0.4s;
+}
+
+/* EQ Vertical Bars */
+.audio-eq {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    transition-delay: 0s;
+}
+
+.audio-player.playing .audio-eq {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.2s;
+}
+
+.eq-bar {
+    width: 4px;
+    background-color: #00e5ff;
+    border-radius: 4px;
+    height: 4px;
+}
+
+/* EQ bounce animations */
+@keyframes eq-bounce-1 {
+
+    0%,
+    100% {
+        height: 6px;
+    }
+
+    50% {
+        height: 16px;
+    }
+}
+
+@keyframes eq-bounce-2 {
+
+    0%,
+    100% {
+        height: 10px;
+    }
+
+    50% {
+        height: 22px;
+    }
+}
+
+@keyframes eq-bounce-3 {
+
+    0%,
+    100% {
+        height: 14px;
+    }
+
+    50% {
+        height: 26px;
+    }
+}
+
+@keyframes eq-bounce-4 {
+
+    0%,
+    100% {
+        height: 8px;
+    }
+
+    50% {
+        height: 20px;
+    }
+}
+
+@keyframes eq-bounce-5 {
+
+    0%,
+    100% {
+        height: 6px;
+    }
+
+    50% {
+        height: 14px;
+    }
+}
+
+.audio-player.playing .bar-1 {
+    animation: eq-bounce-1 0.7s infinite alternate ease-in-out;
+}
+
+.audio-player.playing .bar-2 {
+    animation: eq-bounce-2 0.95s infinite alternate ease-in-out;
+    animation-delay: 0.2s;
+}
+
+.audio-player.playing .bar-3 {
+    animation: eq-bounce-3 0.8s infinite alternate ease-in-out;
+    animation-delay: 0.4s;
+}
+
+.audio-player.playing .bar-4 {
+    animation: eq-bounce-4 1.1s infinite alternate ease-in-out;
+    animation-delay: 0.1s;
+}
+
+.audio-player.playing .bar-5 {
+    animation: eq-bounce-5 0.85s infinite alternate ease-in-out;
+    animation-delay: 0.3s;
+}
+
+@keyframes audio-pulse {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-3px) scale(1.15);
+    }
+}
+
+.language-selector {
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.language-selector .chevron {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.search-bar {
+    position: relative;
+    background-color: var(--body-bg);
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    align-items: center;
+    width: 250px;
+    transition: width 0.3s ease;
+}
+
+.search-bar:focus-within {
+    width: 300px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.search-bar input::placeholder {
+    color: var(--text-light);
+}
+
+.search-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+    margin-left: 0.5rem;
+}
+
+/* --- Main Grid --- */
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    flex-grow: 1;
+}
+
+/* --- Left Column (Featured) --- */
+.featured-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.featured-top-area {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+}
+
+.featured-text {
+    width: 60%;
+    z-index: 2;
+    padding-top: 1rem;
+}
+
+.badge {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent-dark);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.badge::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--accent-dark);
+    margin-right: 0.75rem;
+}
+
+.meta {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+}
+
+.headline {
+    font-size: 2.8rem;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.headline a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.headline:hover {
+    color: var(--accent-main);
+}
+
+.tags {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tags span {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.tags span:hover {
+    color: var(--accent-main);
+}
+
+/* Pill Button */
+.read-btn {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.read-btn:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+    border-color: var(--accent-light);
+}
+
+.read-btn .arrow {
+    transition: transform 0.2s ease;
+}
+
+.read-btn:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* --- Abstract Graphic (The Orb) --- */
+.abstract-graphic {
+    width: 40%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.orb {
+    border-radius: 50%;
+    filter: blur(60px);
+    position: absolute;
+    opacity: 0.8;
+    mix-blend-mode: multiply;
+    animation: float 10s infinite ease-in-out alternate;
+}
+
+.orb-1 {
+    width: 280px;
+    height: 280px;
+    background: rgba(28, 93, 66, 0.6);
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 220px;
+    height: 220px;
+    background: rgba(177, 215, 167, 0.7);
+    top: 30%;
+    right: 15%;
+    animation-delay: -3s;
+}
+
+.orb-3 {
+    width: 250px;
+    height: 250px;
+    background: rgba(236, 228, 179, 0.6);
+    bottom: 10%;
+    left: 10%;
+    animation-delay: -6s;
+}
+
+.glass-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-20px) scale(1.05);
+    }
+}
+
+/* --- Category Tabs --- */
+.category-tabs-container {
+    margin-top: 3rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.category-tabs {
+    display: flex;
+    gap: 2.5rem;
+    padding-top: 1.5rem;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: var(--accent-main);
+    transition: width 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: var(--accent-main);
+}
+
+.tab-btn.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.tab-btn.active::after {
+    width: 100%;
+}
+
+/* --- Bottom Left Row (Dynamic Cards) --- */
+.featured-bottom-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+    transition: opacity 0.4s ease;
+    min-height: 180px;
+}
+
+.featured-bottom-row.fade-out {
+    opacity: 0;
+}
+
+/* --- Mini Card (Dynamic) --- */
+.mini-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 1.2rem;
+    border-radius: var(--radius-card);
+    background: var(--app-bg);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--accent-light);
+}
+
+.mini-card .card-gradient-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+.mini-card .title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.mini-card .title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.mini-card .title a:hover {
+    color: var(--accent-main);
+}
+
+.mini-card .card-why {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mini-card .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.card-tag {
+    font-size: 0.75rem;
+    color: var(--accent-main);
+    background: var(--accent-light);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    font-weight: 500;
+}
+
+/* Card enter animation */
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-enter {
+    animation: cardSlideUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+/* --- Empty State --- */
+.empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-sub {
+    font-size: 0.9rem !important;
+    color: var(--text-light) !important;
+}
+
+/* --- Loading Skeleton --- */
+.loading-skeleton {
+    display: contents;
+}
+
+.skeleton-card {
+    height: 150px;
+    border-radius: var(--radius-card);
+    background: linear-gradient(90deg, var(--border-color) 25%, #f5f5f0 37%, var(--border-color) 63%);
+    background-size: 400% 100%;
+    animation: skeleton-loading 1.4s ease infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
     }
 }
 
 
-// ─── FETCH FEATURED ARTICLE ────────────────────────────────────────
-async function fetchFeaturedArticle() {
-    try {
-        const res = await fetch(`${API_BASE}/api/news/featured`);
-        const data = await res.json();
+/* --- Right Column (Sidebar) --- */
+.sidebar-section {
+    background-color: var(--app-bg);
+    border-radius: var(--radius-card);
+    display: flex;
+    flex-direction: column;
+}
 
-        const headline = document.getElementById('featured-headline');
-        const link = document.getElementById('featured-link');
-        const meta = document.getElementById('featured-meta');
-        const tagsEl = document.getElementById('featured-tags');
-        const readBtn = document.getElementById('featured-read-btn');
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
 
-        if (link) {
-            link.textContent = data.title || 'Welcome to EcoNews';
-            link.href = data.url || '#';
-        } else if (headline) {
-            headline.textContent = data.title || 'Welcome to EcoNews';
-        }
+.sidebar-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
 
-        if (meta) meta.textContent = data.meta || '';
+.view-all {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
 
-        if (tagsEl) {
-            tagsEl.innerHTML = '';
-            (data.tags || []).forEach(tag => {
-                const span = document.createElement('span');
-                span.textContent = `#${tag}`;
-                tagsEl.appendChild(span);
-            });
-        }
+.view-all:hover {
+    color: var(--accent-main);
+}
 
-        if (readBtn) readBtn.href = data.url || '#';
+/* Featured Recommended Article */
+.featured-recommended {
+    margin-bottom: 2rem;
+    cursor: pointer;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    } catch (err) {
-        console.error('Failed to fetch featured article:', err);
+.featured-recommended:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.mock-image {
+    width: 100%;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.mock-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 32, 23, 0.8) 0%, rgba(13, 32, 23, 0) 100%);
+    z-index: 1;
+}
+
+.mock-image-content {
+    position: relative;
+    z-index: 2;
+}
+
+.text-white {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.mock-image-content .title {
+    color: #ffffff;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+/* Recommended List */
+.recommended-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: relative;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    border-radius: var(--radius-thumb);
+    z-index: 1;
+}
+
+.list-item:hover {
+    transform: translateX(5px);
+}
+
+.mock-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-thumb);
+    flex-shrink: 0;
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.list-item:hover .mock-thumb {
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    box-shadow: 0 4px 15px rgba(28, 93, 66, 0.15);
+}
+
+.item-details {
+    margin-left: calc(80px + 1.25rem);
+    transition: color 0.4s ease;
+    width: 100%;
+}
+
+.list-item .item-details .meta,
+.list-item .item-details .title {
+    transition: color 0.4s ease;
+}
+
+.list-item:hover .item-details .title {
+    color: #ffffff;
+}
+
+.list-item:hover .item-details .meta {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.item-details .title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* --- Gradient Backgrounds --- */
+.gradient-bg-1 {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent-vibrant));
+}
+
+.gradient-bg-2 {
+    background: linear-gradient(135deg, #1C5D42, #E7F3EE);
+}
+
+.gradient-bg-3 {
+    background: linear-gradient(135deg, #0f3d2a, #20875e);
+}
+
+.gradient-bg-4 {
+    background: linear-gradient(135deg, #B1D7A7, #1C5D42);
+}
+
+.gradient-bg-5 {
+    background: linear-gradient(135deg, #ECE4B3, #587164);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .abstract-graphic {
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: 0.2;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .featured-text {
+        width: 100%;
     }
 }
 
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
 
-// ─── FETCH AUDIO URL ────────────────────────────────────────────────
-async function fetchAudioUrl() {
-    try {
-        const res = await fetch(`${API_BASE}/api/audio`);
-        const data = await res.json();
-        audioUrl = data.audio_url || data.local_audio || null;
+    .app-container {
+        padding: 1.5rem;
+    }
 
-        if (audioUrl) {
-            const audioEl = document.getElementById('hidden-audio');
-            if (audioEl) audioEl.src = audioUrl;
-        }
-    } catch (err) {
-        console.error('Failed to fetch audio:', err);
+    .top-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-left {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .nav-right {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .headline {
+        font-size: 1.8rem;
+    }
+
+    .featured-bottom-row {
+        grid-template-columns: 1fr;
+    }
+
+    .category-tabs {
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 }
 
-
-// ─── RENDER CATEGORY CARDS ──────────────────────────────────────────
-function renderCategoryCards(category) {
-    const container = document.getElementById('dynamic-cards-container');
-    if (!container) return;
-
-    const items = allNews[category] || [];
-
-    // Fade out
-    container.classList.add('fade-out');
-
-    setTimeout(() => {
-        container.innerHTML = '';
-
-        if (items.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <p>No news available for <strong>${CATEGORY_LABELS[category] || category}</strong> yet.</p>
-                    <p class="empty-sub">Run the pipeline to curate fresh news.</p>
-                </div>
-            `;
-            container.classList.remove('fade-out');
-            return;
-        }
-
-        items.forEach((item, idx) => {
-            const card = document.createElement('article');
-            card.className = 'mini-card';
-            card.style.animationDelay = `${idx * 0.08}s`;
-            card.classList.add('card-enter');
-
-            const tags = (item.tags || []).map(t => `<span class="card-tag">#${t}</span>`).join('');
-            const source = item.source_id || '';
-            const categoryLabel = CATEGORY_LABELS[category] || category;
-
-            card.innerHTML = `
-                <div class="card-gradient-bar ${GRADIENT_CLASSES[idx % GRADIENT_CLASSES.length]}"></div>
-                <div class="meta">${categoryLabel} • ${source}</div>
-                <h4 class="title">
-                    <a href="${item.url || '#'}" target="_blank" rel="noopener">${item.title || 'Untitled'}</a>
-                </h4>
-                <p class="card-why">${item.why_pick || ''}</p>
-                <div class="card-tags">${tags}</div>
-            `;
-
-            card.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'A') {
-                    window.open(item.url || '#', '_blank');
-                }
-            });
-
-            container.appendChild(card);
-        });
-
-        container.classList.remove('fade-out');
-    }, 300);
+/* --- Email Subscription Toast --- */
+.toast-notification {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    background-color: var(--app-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-hover);
+    width: 320px;
+    z-index: 1000;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
+.toast-notification.hidden {
+    opacity: 0;
+    transform: translateX(-120%);
+    pointer-events: none;
+}
 
-// ─── RENDER SIDEBAR ─────────────────────────────────────────────────
-function renderSidebar() {
-    // Use the dedicated recommended items (6 items from API)
-    const items = recommendedNews.length > 0 ? recommendedNews : [];
+.toast-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+    line-height: 1;
+}
 
-    // If no recommended, try to gather from categories
-    if (items.length === 0) {
-        for (const cat of Object.keys(allNews)) {
-            for (const item of (allNews[cat] || [])) {
-                items.push({ ...item, _category: cat });
-            }
-        }
+.toast-close-btn:hover {
+    color: var(--accent-main);
+}
+
+.toast-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.toast-logo {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--accent-vibrant), var(--accent-dark));
+    border-radius: 6px;
+    transform: rotate(45deg);
+    margin: 4px;
+}
+
+.toast-message {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+}
+
+.toast-submessage {
+    color: #318748;
+    opacity: 0.85;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+}
+
+.toast-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.toast-form input {
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-color);
+    background-color: var(--body-bg);
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.toast-form input:focus {
+    border-color: var(--accent-main);
+}
+
+.toast-subscribe-btn {
+    padding: 0.8rem;
+    border-radius: var(--radius-pill);
+    border: none;
+    background-color: var(--accent-dark);
+    color: white;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toast-subscribe-btn:hover {
+    background-color: var(--accent-main);
+}
+
+.toast-subscribe-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.toast-status {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    min-height: 1.2em;
+}
+
+/* ─── COFFEE NUDGE TOAST ─────────────────────────────────────────── */
+.coffee-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0D2017 100%);
+    border: 1px solid rgba(49, 165, 114, 0.3);
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem 1.4rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 2000;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 0 30px rgba(49, 165, 114, 0.12);
+    max-width: 320px;
+    transform: translateY(120px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        opacity 0.4s ease;
+}
+
+.coffee-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.coffee-toast.hidden {
+    pointer-events: none;
+}
+
+.coffee-toast-close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.8rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+    padding: 2px;
+}
+
+.coffee-toast-close:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.coffee-toast-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+    animation: coffee-steam 2.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 8px rgba(255, 180, 80, 0.5));
+}
+
+@keyframes coffee-steam {
+
+    0%,
+    100% {
+        transform: rotate(-5deg) scale(1);
     }
 
-    // Sidebar featured (first recommended item)
-    const featuredMeta = document.getElementById('sidebar-featured-meta');
-    const featuredTitle = document.getElementById('sidebar-featured-title');
-    const featuredCard = document.getElementById('sidebar-featured');
+    50% {
+        transform: rotate(5deg) scale(1.1);
+    }
+}
 
-    if (items.length > 0) {
-        const first = items[0];
-        const catKey = first.category || first._category || '';
-        if (featuredMeta) featuredMeta.textContent = `${CATEGORY_LABELS[catKey] || catKey} • Today`;
-        if (featuredTitle) featuredTitle.textContent = first.title || 'No Title';
-        if (featuredCard) {
-            featuredCard.style.cursor = 'pointer';
-            featuredCard.onclick = () => window.open(first.url || '#', '_blank');
-        }
+.coffee-toast-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.coffee-toast-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.coffee-toast-sub {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.4;
+}
+
+.coffee-toast-btn {
+    margin-top: 0.6rem;
+    background: linear-gradient(135deg, #31A572, #1C5D42);
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(49, 165, 114, 0.35);
+}
+
+.coffee-toast-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(49, 165, 114, 0.5);
+}
+
+/* ─── NAV ALERT BANNER ───────────────────────────────────────────── */
+.nav-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: linear-gradient(135deg, rgba(180, 28, 28, 0.18), rgba(120, 10, 10, 0.25));
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 30px;
+    padding: 0.4rem 0.9rem 0.4rem 0.65rem;
+    max-width: 480px;
+    position: relative;
+    backdrop-filter: blur(8px);
+    animation: alert-fade-in 0.8s ease forwards;
+    flex-shrink: 1;
+}
+
+@keyframes alert-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
     }
 
-    // Sidebar list (next 5 recommended items)
-    const listContainer = document.getElementById('sidebar-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = '';
-
-    const sidebarItems = items.slice(1, 6);
-    sidebarItems.forEach((item, idx) => {
-        const article = document.createElement('article');
-        article.className = 'list-item';
-        article.style.cursor = 'pointer';
-
-        const catKey = item.category || item._category || '';
-        const catLabel = CATEGORY_LABELS[catKey] || catKey;
-
-        article.innerHTML = `
-            <div class="mock-thumb ${GRADIENT_CLASSES[(idx + 1) % GRADIENT_CLASSES.length]}"></div>
-            <div class="item-details">
-                <div class="meta">${catLabel} • Today</div>
-                <h4 class="title">${item.title || 'Untitled'}</h4>
-            </div>
-        `;
-
-        article.addEventListener('click', () => {
-            window.open(item.url || '#', '_blank');
-        });
-
-        listContainer.appendChild(article);
-    });
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-
-// ─── FALLBACK if API fails ──────────────────────────────────────────
-function showFallbackCards() {
-    const container = document.getElementById('dynamic-cards-container');
-    if (!container) return;
-    container.innerHTML = `
-        <div class="empty-state">
-            <p>Could not connect to the news server.</p>
-            <p class="empty-sub">Make sure the backend is running on the same port.</p>
-        </div>
-    `;
+.nav-alert-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px #ef4444;
+    animation: dot-blink 1.6s infinite ease-in-out;
 }
 
+@keyframes dot-blink {
 
-// ─── CATEGORY TABS ──────────────────────────────────────────────────
-function initCategoryTabs() {
-    const tabsContainer = document.getElementById('category-tabs');
-    if (!tabsContainer) return;
-
-    tabsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.tab-btn');
-        if (!btn) return;
-
-        const category = btn.dataset.category;
-        if (!category || category === activeCategory) return;
-
-        // Update active tab
-        tabsContainer.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        // Update active nav link too
-        const navLinks = document.getElementById('nav-links');
-        if (navLinks) {
-            navLinks.querySelectorAll('a').forEach(a => {
-                a.classList.toggle('active', a.dataset.category === category);
-            });
-        }
-
-        activeCategory = category;
-        renderCategoryCards(category);
-    });
-}
-
-
-// ─── NAV BUTTONS ─────────────────────────────────────────────────────
-function initNavButtons() {
-    // "Get News on Email" — opens the subscription popup
-    const navEmail = document.getElementById('nav-email');
-    const emailPopup = document.getElementById('email-popup');
-    if (navEmail && emailPopup) {
-        navEmail.addEventListener('click', (e) => {
-            e.preventDefault();
-            emailPopup.classList.remove('hidden');
-        });
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 6px #ef4444;
     }
 
-    // "Voice Assistant" — triggers the audio player headphone button
-    const navVoice = document.getElementById('nav-voice');
-    const audioPlayBtn = document.getElementById('audio-headphone-btn');
-    if (navVoice && audioPlayBtn) {
-        navVoice.addEventListener('click', (e) => {
-            e.preventDefault();
-            audioPlayBtn.click();
-        });
+    50% {
+        opacity: 0.3;
+        box-shadow: none;
     }
-    // "About Me" needs no JS — it uses href directly in HTML
 }
 
-
-// ─── AUDIO PLAYER ───────────────────────────────────────────────────
-function initAudioPlayer() {
-    const audioPlayer = document.getElementById('audio-player');
-    const audioPlayBtn = document.getElementById('audio-headphone-btn');
-    const audioStopBtn = document.getElementById('audio-stop-btn');
-    const hiddenAudio = document.getElementById('hidden-audio');
-
-    if (!audioPlayBtn || !audioStopBtn || !hiddenAudio) return;
-
-    audioPlayBtn.addEventListener('click', async () => {
-        if (isAudioPlaying) return;
-
-        // Fetch audio URL if not loaded
-        if (!audioUrl) {
-            try {
-                const res = await fetch(`${API_BASE}/api/audio`);
-                const data = await res.json();
-                audioUrl = data.audio_url || data.local_audio || null;
-            } catch (err) {
-                console.error('Audio fetch failed:', err);
-            }
-        }
-
-        if (!audioUrl) {
-            alert('No audio available yet. Run the pipeline (run_daily.py) to generate audio.');
-            return;
-        }
-
-        hiddenAudio.src = audioUrl;
-        hiddenAudio.play().then(() => {
-            isAudioPlaying = true;
-            audioPlayer.classList.add('playing');
-        }).catch(err => {
-            console.error('Audio play failed:', err);
-            alert('Could not play audio. It may still be generating.');
-        });
-    });
-
-    audioStopBtn.addEventListener('click', () => {
-        hiddenAudio.pause();
-        hiddenAudio.currentTime = 0;
-        isAudioPlaying = false;
-        audioPlayer.classList.remove('playing');
-    });
-
-    // When audio ends naturally
-    hiddenAudio.addEventListener('ended', () => {
-        isAudioPlaying = false;
-        audioPlayer.classList.remove('playing');
-    });
+.nav-alert-text {
+    font-size: 0.72rem;
+    color: #ffffff;
+    line-height: 1.4;
+    font-style: italic;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-
-// ─── EMAIL SUBSCRIPTION POPUP ───────────────────────────────────────
-function initEmailPopup() {
-    const emailPopup = document.getElementById('email-popup');
-    const closePopupBtn = document.getElementById('close-popup');
-    const subscribeForm = document.getElementById('subscribe-form');
-    const statusEl = document.getElementById('toast-status');
-
-    // Show popup after 4 seconds
-    setTimeout(() => {
-        emailPopup.classList.remove('hidden');
-    }, 4000);
-
-    // Close popup on X click
-    closePopupBtn.addEventListener('click', () => {
-        emailPopup.classList.add('hidden');
-    });
-
-    // Handle form submission → POST to backend
-    subscribeForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const emailInput = document.getElementById('subscribe-email');
-        const email = emailInput.value.trim();
-        const btn = subscribeForm.querySelector('.subscribe-btn');
-
-        if (!email) return;
-
-        btn.disabled = true;
-        btn.textContent = 'Subscribing...';
-
-        try {
-            const res = await fetch(`${API_BASE}/api/subscribe`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                btn.textContent = 'Subscribed! 🎉';
-                btn.style.backgroundColor = '#31A572';
-                if (statusEl) {
-                    statusEl.textContent = `✅ ${email} subscribed successfully!`;
-                    statusEl.style.color = '#31A572';
-                }
-
-                setTimeout(() => {
-                    emailPopup.classList.add('hidden');
-                    btn.textContent = 'Subscribe';
-                    btn.style.backgroundColor = '';
-                    btn.disabled = false;
-                    emailInput.value = '';
-                    if (statusEl) statusEl.textContent = '';
-                }, 2000);
-            } else {
-                throw new Error(data.detail || 'Subscription failed');
-            }
-        } catch (err) {
-            btn.textContent = 'Try Again';
-            btn.style.backgroundColor = '#dc3545';
-            if (statusEl) {
-                statusEl.textContent = `❌ ${err.message}`;
-                statusEl.style.color = '#dc3545';
-            }
-
-            setTimeout(() => {
-                btn.textContent = 'Subscribe';
-                btn.style.backgroundColor = '';
-                btn.disabled = false;
-            }, 2000);
-        }
-    });
+.nav-alert-text a {
+    color: #ff9999;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
 }
 
-
-// ─── PARALLAX ORBS ──────────────────────────────────────────────────
-function initParallax() {
-    const orbs = document.querySelectorAll('.orb');
-
-    document.addEventListener('mousemove', (e) => {
-        const x = e.clientX / window.innerWidth - 0.5;
-        const y = e.clientY / window.innerHeight - 0.5;
-
-        orbs.forEach((orb, index) => {
-            const speed = (index + 1) * 20;
-            const xOffset = x * speed;
-            const yOffset = y * speed;
-            orb.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${1 + (index * 0.02)})`;
-        });
-    });
+.nav-alert-text a:hover {
+    color: #ffffff;
 }
 
+.nav-alert-text code {
+    background: rgba(239, 68, 68, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-radius: 4px;
+    padding: 0 5px;
+    font-size: 0.68rem;
+    font-family: 'Fira Code', monospace;
+    color: #ffcccc;
+    font-style: normal;
+}
+
+.nav-alert-close {
+    background: none;
+    border: none;
+    color: rgba(255, 180, 180, 0.5);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    margin-left: 0.2rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1;
+}
+
+.nav-alert-close:hover {
+    color: #fff;
+    background: rgba(239, 68, 68, 0.25);
+}
+
+.nav-alert.dismissed {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
