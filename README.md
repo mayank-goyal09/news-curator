@@ -10,7 +10,6 @@
 
 <br/>
 
-
 <!-- Badges -->
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
@@ -295,4 +294,3 @@ Set up **Task Scheduler** to run `run_daily.py` automatically:
 
 <!-- Footer Wave -->
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:31A572,100:0D2017&height=120&section=footer" width="100%"/>
-
