@@ -35,12 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
     initCoffeeToast();    // ☕ shows after 15s
     initNavButtons();     // new 3-button nav
     initCategoryTabs();   // category tabs still work below the headline
+    initNavAlert();       // 🔴 sad alert banner
 
     // Fetch everything from the backend
     fetchAllNews();
     fetchFeaturedArticle();
     fetchAudioUrl();
 });
+
+
+// ─── NAV ALERT DISMISS ──────────────────────────────────────────────
+function initNavAlert() {
+    const alert = document.getElementById('nav-alert');
+    const closeBtn = document.getElementById('nav-alert-close');
+    if (!alert || !closeBtn) return;
+
+    closeBtn.addEventListener('click', () => {
+        alert.classList.add('dismissed');
+        setTimeout(() => alert.remove(), 350);
+    });
+}
+
 
 
 // ─── COFFEE TOAST ───────────────────────────────────────────────────
