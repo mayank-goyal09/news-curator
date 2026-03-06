@@ -22,6 +22,8 @@
 
 > **EcoNews** fetches news from 10+ RSS feeds every day, curates the best 15 stories across 5 categories using a local AI (Ollama), converts them to audio, and emails the digest to subscribers — all automatically.
 
+### 🌐 [**Experience the Live Demo Here**](https://mayank-goyal09.github.io/news-curator/frontend/index.html)
+
 </div>
 
 ---
