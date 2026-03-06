@@ -1,8 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════
 //  EcoNews — Frontend Script (Connected to FastAPI Backend)
+//  Falls back to static data/news.json when API is unavailable
 // ═══════════════════════════════════════════════════════════════════
 
 const API_BASE = window.location.origin; // Same origin as the server
+const STATIC_JSON = 'data/news.json';    // Fallback for GitHub Pages
 
 // ─── STATE ──────────────────────────────────────────────────────────
 let allNews = {};          // { satire: [...], ai: [...], ... }
@@ -10,6 +12,7 @@ let recommendedNews = [];  // 6 sidebar recommended items
 let activeCategory = 'satire';
 let audioUrl = null;
 let isAudioPlaying = false;
+let staticData = null;     // Cached static JSON data
 
 // Category labels for display
 const CATEGORY_LABELS = {
@@ -92,23 +95,75 @@ function initCoffeeToast() {
 
 
 
+// ─── LOAD STATIC JSON (FALLBACK) ────────────────────────────────────
+async function loadStaticData() {
+    if (staticData) return staticData;
+    try {
+        const res = await fetch(STATIC_JSON);
+        if (!res.ok) throw new Error(`Static JSON returned ${res.status}`);
+        staticData = await res.json();
+        console.log('📦 Loaded static news data (offline mode)');
+        return staticData;
+    } catch (err) {
+        console.error('Failed to load static data:', err);
+        return null;
+    }
+}
+
+
+// ─── APPLY DATA (shared by API + static fallback) ───────────────────
+function applyNewsData(data) {
+    allNews = data.categories || {};
+    recommendedNews = data.recommended || [];
+    audioUrl = data.audio_url || audioUrl || null;
+
+    renderCategoryCards(activeCategory);
+    renderSidebar();
+}
+
+function applyFeaturedData(data) {
+    const headline = document.getElementById('featured-headline');
+    const link = document.getElementById('featured-link');
+    const meta = document.getElementById('featured-meta');
+    const tagsEl = document.getElementById('featured-tags');
+    const readBtn = document.getElementById('featured-read-btn');
+
+    if (link) {
+        link.textContent = data.title || 'Welcome to EcoNews';
+        link.href = data.url || '#';
+    } else if (headline) {
+        headline.textContent = data.title || 'Welcome to EcoNews';
+    }
+
+    if (meta) meta.textContent = data.meta || '';
+
+    if (tagsEl) {
+        tagsEl.innerHTML = '';
+        (data.tags || []).forEach(tag => {
+            const span = document.createElement('span');
+            span.textContent = `#${tag}`;
+            tagsEl.appendChild(span);
+        });
+    }
+
+    if (readBtn) readBtn.href = data.url || '#';
+}
+
+
 // ─── FETCH ALL NEWS ─────────────────────────────────────────────────
 async function fetchAllNews() {
     try {
         const res = await fetch(`${API_BASE}/api/news`);
         const data = await res.json();
-
-        allNews = data.categories || {};
-        recommendedNews = data.recommended || [];
-        audioUrl = data.audio_url || null;
-
-        // Paint current category
-        renderCategoryCards(activeCategory);
-        renderSidebar();
-
+        applyNewsData(data);
     } catch (err) {
-        console.error('Failed to fetch news:', err);
-        showFallbackCards();
+        console.warn('API unavailable, falling back to static JSON...', err);
+        const data = await loadStaticData();
+        if (data) {
+            applyNewsData(data);
+        } else {
+            showFallbackCards();
+        }
     }
 }
 
@@ -118,35 +173,23 @@ async function fetchFeaturedArticle() {
     try {
         const res = await fetch(`${API_BASE}/api/news/featured`);
         const data = await res.json();
-
-        const headline = document.getElementById('featured-headline');
-        const link = document.getElementById('featured-link');
-        const meta = document.getElementById('featured-meta');
-        const tagsEl = document.getElementById('featured-tags');
-        const readBtn = document.getElementById('featured-read-btn');
-
-        if (link) {
-            link.textContent = data.title || 'Welcome to EcoNews';
-            link.href = data.url || '#';
-        } else if (headline) {
-            headline.textContent = data.title || 'Welcome to EcoNews';
-        }
-
-        if (meta) meta.textContent = data.meta || '';
-
-        if (tagsEl) {
-            tagsEl.innerHTML = '';
-            (data.tags || []).forEach(tag => {
-                const span = document.createElement('span');
-                span.textContent = `#${tag}`;
-                tagsEl.appendChild(span);
-            });
-        }
-
-        if (readBtn) readBtn.href = data.url || '#';
-
+        applyFeaturedData(data);
     } catch (err) {
-        console.error('Failed to fetch featured article:', err);
+        console.warn('Featured API unavailable, using static data...');
+        const data = await loadStaticData();
+        if (data) {
+            // Pick the first top_pick or the first article from any category
+            const picks = data.top_picks || [];
+            const first = picks[0] || Object.values(data.categories || {})[0]?.[0];
+            if (first) {
+                applyFeaturedData({
+                    title: first.title,
+                    url: first.url,
+                    meta: (first.category || '') + ' • ' + (first.source_id || ''),
+                    tags: first.tags || [],
+                });
+            }
+        }
     }
 }
 
@@ -157,13 +200,17 @@ async function fetchAudioUrl() {
         const res = await fetch(`${API_BASE}/api/audio`);
         const data = await res.json();
         audioUrl = data.audio_url || data.local_audio || null;
-
-        if (audioUrl) {
-            const audioEl = document.getElementById('hidden-audio');
-            if (audioEl) audioEl.src = audioUrl;
-        }
     } catch (err) {
-        console.error('Failed to fetch audio:', err);
+        console.warn('Audio API unavailable, checking static data...');
+        const data = await loadStaticData();
+        if (data && data.audio_url) {
+            audioUrl = data.audio_url;
+        }
+    }
+
+    if (audioUrl) {
+        const audioEl = document.getElementById('hidden-audio');
+        if (audioEl) audioEl.src = audioUrl;
     }
 }
 
