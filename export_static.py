@@ -19,6 +19,15 @@ def export():
         print(f"No digest found for {today}. Run run_curate.py first.")
         return
 
+    # Inject audio URL for GitHub Pages (Voice Assistant fallback)
+    github_pages_base = os.getenv(
+        "GITHUB_PAGES_BASE_URL",
+        "https://mayank-goyal09.github.io/news-curator"
+    )
+    audio_file = f"data/audio/digest_{today}.mp3"
+    if os.path.exists(audio_file):
+        digest["audio_url"] = f"{github_pages_base.rstrip('/')}/{audio_file}"
+
     out_dir = os.path.join("frontend", "data")
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "news.json")
@@ -31,6 +40,8 @@ def export():
     rec   = len(digest.get("recommended", []))
     print(f"✅ Exported {total} articles + {rec} recommended → {out_path}")
     print(f"   Date: {today}")
+    if digest.get("audio_url"):
+        print(f"   🎧 Audio: {digest['audio_url']}")
 
 if __name__ == "__main__":
     export()
