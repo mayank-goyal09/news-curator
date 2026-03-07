@@ -5,7 +5,7 @@
 
 <!-- Animated Typing -->
 <a href="https://mayank-goyal09.github.io/news-curator/frontend/index.html">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=31A572&center=true&vCenter=true&width=700&lines=Powered+by+FastAPI%2C+SQLite%2C+and+Vanilla+JS;Local+AI+Curation+with+Ollama+(llama3.2);Text-to-Speech+Audio+Podcasts;Automated+HTML+Email+Newsletters;Hosted+and+served+on+GitHub+Pages;%E2%98%95+Grab+your+coffee...+Your+curator+is+ready!" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=31A572&center=true&vCenter=true&width=700&lines=Powered+by+FastAPI%2C+SQLite%2C+and+Vanilla+JS;Local+AI+Curation+with+Ollama+(llama3.2);Text-to-Speech+Audio+Podcasts;Automated+HTML+Email+Newsletters;Hosted+and+served+on+GitHub+Pages;%F0%9F%8E%A5+Watch+the+Full+Video+Demo+Below;%E2%98%95+Grab+your+coffee...+Your+curator+is+ready!" alt="Typing SVG" />
 </a>
 
 <br/>
@@ -23,6 +23,8 @@
 > **EcoNews** fetches news from 10+ RSS feeds every day, curates the best 15 stories across 5 categories using a local AI (Ollama), converts them to audio, and emails the digest to subscribers — all automatically.
 
 ### 🌐 [**Experience the Live Demo Here**](https://mayank-goyal09.github.io/news-curator/frontend/index.html)
+
+[![EcoNews Video Demo](image.png)](https://youtu.be/EjDP68yU3eM)
 
 </div>
 
